@@ -1,0 +1,179 @@
+import { lazy, Suspense } from "react"
+import { Navigate, Route, Routes } from "react-router-dom"
+import { SidebarLayout } from "./components/Layout/sidebar-layout"
+import { Skeleton } from "./components/ui/skeleton"
+
+const OverviewPage = lazy(() => import("./pages/OverviewPage"))
+const KioskPage = lazy(() => import("./pages/KioskPage"))
+const KioskDetailPage = lazy(() => import("./pages/KioskDetailPage"))
+const GalleryPage = lazy(() => import("./pages/GalleryPage"))
+const GalleryDetailPage = lazy(() => import("./pages/GalleryDetailPage"))
+const StatisticsPage = lazy(() => import("./pages/StatisticsPage"))
+const TransactionsPage = lazy(() => import("./pages/TransactionsPage"))
+const FramePhotoPage = lazy(() => import("./pages/FramePhotoPage"))
+const FrameEditorPage = lazy(() => import("./pages/FrameEditorPage"))
+const VoucherPage = lazy(() => import("./pages/VoucherPage"))
+const VoucherDetailPage = lazy(() => import("./pages/VoucherDetailPage"))
+const PaymentKeyPage = lazy(() => import("./pages/PaymentKeyPage"))
+
+function OverviewPageFallback() {
+  return (
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8" aria-label="Loading Overview">
+      <div className="space-y-3">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-4 w-full max-w-xl" />
+      </div>
+      <Skeleton className="h-40 w-full" />
+      <Skeleton className="h-80 w-full" />
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/admin" replace />} />
+      <Route path="/admin" element={<SidebarLayout />}>
+        <Route
+          index
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <OverviewPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="kiosk"
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <KioskPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="gallery"
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <GalleryPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="payment-key"
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <PaymentKeyPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <div className="p-6">
+              <h1 className="text-2xl font-semibold">Halaman belum tersedia</h1>
+              <p className="mt-2 text-muted-foreground">
+                Menu ini belum memiliki halaman.
+              </p>
+            </div>
+          }
+        />
+      </Route>
+      <Route path="/kiosk" element={<SidebarLayout />}>
+        <Route
+          path=":slug"
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <KioskDetailPage />
+            </Suspense>
+          }
+        />
+      </Route>
+      <Route path="/gallery" element={<SidebarLayout />}>
+        <Route
+          path=":kioskId"
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <GalleryDetailPage />
+            </Suspense>
+          }
+        />
+      </Route>
+      <Route path="/statistics" element={<SidebarLayout />}>
+        <Route
+          index
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <StatisticsPage />
+            </Suspense>
+          }
+        />
+      </Route>
+      <Route path="/transactions" element={<SidebarLayout />}>
+        <Route
+          index
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <TransactionsPage />
+            </Suspense>
+          }
+        />
+      </Route>
+      <Route path="/frame-photo" element={<SidebarLayout />}>
+        <Route
+          index
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <FramePhotoPage />
+            </Suspense>
+          }
+        />
+      </Route>
+      <Route path="/frame" element={<SidebarLayout />}>
+        <Route
+          index
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <FramePhotoPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="new"
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <FrameEditorPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path=":frameId/edit"
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <FrameEditorPage />
+            </Suspense>
+          }
+        />
+      </Route>
+      <Route path="/voucher" element={<SidebarLayout />}>
+        <Route
+          index
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <VoucherPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path=":kioskId"
+          element={
+            <Suspense fallback={<OverviewPageFallback />}>
+              <VoucherDetailPage />
+            </Suspense>
+          }
+        />
+      </Route>
+    </Routes>
+  )
+}
+
+export default App
